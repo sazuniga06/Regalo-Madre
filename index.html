@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>¡Feliz Cumpleaños, Mamá!</title>
-        <link rel="icon" href="cover/CodeZM.png" type="image/png">
+    <link rel="icon" href="cover/CodeZM.png" type="image/png">
     <!-- Google Fonts para una tipografía más personal -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,11 +13,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Estilos personalizados para el regalo y las animaciones -->
     <link rel="stylesheet" href="styles.css">
+    
 </head>
 <body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-4 overflow-hidden">
 
     <!-- Contenedor principal -->
-    <div class="gift-container w-full max-w-sm md:max-w-none h-[600px] flex items-center justify-center">
+    <div class="gift-container w-full h-[550px] flex items-center justify-center">
         <!-- Contenedor del confeti -->
         <div id="confetti-container" class="confetti-container"></div>
         
@@ -29,8 +30,7 @@
 
         <!-- La tarjeta musical (inicialmente oculta) -->
         <div id="musicCard" class="music-card">
-            <!-- Contenido de la tarjeta con clases responsivas de Flexbox -->
-            <div id="player-card-content" class="bg-gray-800 rounded-xl shadow-2xl w-80 text-white text-center flex flex-col md:flex-row">
+            <div id="player-card-content" class="bg-gray-800 rounded-xl shadow-2xl w-80 text-white text-center flex">
                 <!-- Columna del reproductor -->
                 <div id="player-column" class="p-6 w-80 flex-shrink-0">
                     <img id="musicCover" src="" alt="Foto de Cumpleaños" class="rounded-lg shadow-lg mb-4 w-full h-auto">
@@ -44,9 +44,9 @@
                     </button>
                 </div>
 
-                <!-- Columna de subtítulos (inicialmente oculta/colapsada) -->
-                <div id="subtitle-column" class="h-0 md:h-auto md:w-0 opacity-0 transition-all duration-700 ease-in-out overflow-hidden">
-                    <div class="bg-gray-900/70 p-6 h-full rounded-b-xl md:rounded-r-xl md:rounded-bl-none w-80">
+                <!-- Columna de subtítulos (inicialmente colapsada) -->
+                <div id="subtitle-column" class="w-0 opacity-0 transition-all duration-700 ease-in-out overflow-hidden">
+                    <div class="bg-gray-900/70 p-6 h-full rounded-r-xl w-[320px]">
                         <h3 class="text-3xl font-bold mb-4 text-pink-400 border-b border-gray-700 pb-2">Letra</h3>
                         <div id="subtitle-container" class="text-gray-300 text-2xl font-medium"></div>
                     </div>

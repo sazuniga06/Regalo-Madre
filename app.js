@@ -34,6 +34,8 @@
             function vttTimeToSeconds(time) {
                 const parts = time.split(':');
                 let hours = 0, minutes = 0, seconds = 0;
+
+                // Maneja formatos como 01:02:03.456 o 02:03.456
                 if (parts.length === 3) {
                     hours = parseInt(parts[0], 10);
                     minutes = parseInt(parts[1], 10);
@@ -41,58 +43,98 @@
                 } else if (parts.length === 2) {
                     minutes = parseInt(parts[0], 10);
                     seconds = parseFloat(parts[1].replace(',', '.'));
-                } else { return 0; }
-                if (isNaN(hours) || isNaN(minutes) || isNaN(seconds)) { return 0; }
+                } else {
+                    return 0; // Formato inválido
+                }
+
+                if (isNaN(hours) || isNaN(minutes) || isNaN(seconds)) {
+                    console.error('No se pudieron analizar los componentes de tiempo de:', time);
+                    return 0;
+                }
+                
                 return (hours * 3600) + (minutes * 60) + seconds;
             }
 
             function parseVtt(vttText) {
                 const normalizedText = vttText.trim().replace(/\r\n?/g, '\n');
                 const blocks = normalizedText.split('\n\n');
-                return blocks.map(block => {
-                    const lines = block.split('\n');
-                    if (lines[0].includes('WEBVTT') || lines.length < 2) { return null; }
-                    const timeLineIndex = lines.findIndex(line => line.includes(' --> '));
-                    if (timeLineIndex === -1) { return null; }
-                    const timeMatch = lines[timeLineIndex].split(' --> ');
-                    if (timeMatch.length !== 2) { return null; }
-                    const textLines = lines.slice(timeLineIndex + 1);
-                    if (textLines.length === 0 || textLines[0].trim() === '') { return null; }
-                    return {
-                        startTime: vttTimeToSeconds(timeMatch[0].trim()),
-                        endTime: vttTimeToSeconds(timeMatch[1].trim()),
-                        text: textLines.join('<br>')
-                    };
-                }).filter(Boolean);
+
+                return blocks
+                    .map(block => {
+                        const lines = block.split('\n');
+                        // Ignora el encabezado WEBVTT y los bloques vacíos
+                        if (lines[0].includes('WEBVTT') || lines.length < 2) {
+                            return null;
+                        }
+                        
+                        const timeLineIndex = lines.findIndex(line => line.includes(' --> '));
+                        if (timeLineIndex === -1) {
+                            return null;
+                        }
+
+                        const timeMatch = lines[timeLineIndex].split(' --> ');
+                        if (timeMatch.length !== 2) {
+                            return null;
+                        }
+
+                        const textLines = lines.slice(timeLineIndex + 1);
+                        if (textLines.length === 0 || textLines[0].trim() === '') {
+                            return null;
+                        }
+
+                        return {
+                            startTime: vttTimeToSeconds(timeMatch[0].trim()),
+                            endTime: vttTimeToSeconds(timeMatch[1].trim()),
+                            text: textLines.join('<br>')
+                        };
+                    })
+                    .filter(Boolean); // Limpia los resultados nulos
             }
             
             function loadSubtitles(url) {
-                fetch(url).then(response => {
-                    if (!response.ok) { throw new Error(`Error HTTP: ${response.status}`); }
-                    return response.text();
-                }).then(text => {
-                    subtitles = parseVtt(text);
-                }).catch(error => {
-                    console.error('Error al cargar los subtítulos:', error);
-                    subtitleContainer.textContent = "Subtítulos no disponibles.";
-                });
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Error HTTP: ${response.status}`);
+                        }
+                        return response.text();
+                    })
+                    .then(text => {
+                        subtitles = parseVtt(text);
+                    })
+                    .catch(error => {
+                        console.error('Error al cargar los subtítulos:', error);
+                        subtitleContainer.textContent = "Subtítulos no disponibles.";
+                    });
             }
             
-            let currentSubtitleText = '';
+            let currentSubtitleText = ''; // Rastrea el texto del subtítulo actual
 
             function updateSubtitle() {
                 const currentTime = audioElement.currentTime;
-                const currentSubtitle = subtitles.find(sub => currentTime >= sub.startTime && currentTime <= sub.endTime);
+                const currentSubtitle = subtitles.find(
+                    sub => currentTime >= sub.startTime && currentTime <= sub.endTime
+                );
+                
                 const newText = currentSubtitle ? currentSubtitle.text : '';
+
                 if (newText !== currentSubtitleText) {
+                    // Desvanece el texto antiguo
                     subtitleContainer.style.opacity = 0;
+
                     setTimeout(() => {
+                        // Cambia el texto después de que se haya desvanecido
                         subtitleContainer.innerHTML = newText;
                         currentSubtitleText = newText;
-                        if (newText) { subtitleContainer.style.opacity = 1; }
-                    }, 250);
+                        
+                        // Si hay texto nuevo, haz que aparezca
+                        if (newText) {
+                            subtitleContainer.style.opacity = 1;
+                        }
+                    }, 250); // Esta duración debe coincidir con la transición de CSS
                 }
             }
+
 
             // --- LÓGICA PRINCIPAL ---
 
@@ -101,7 +143,9 @@
                 musicArtist.textContent = song.artist;
                 musicCover.src = song.cover;
                 audioElement.src = song.src;
-                if (song.subtitles) { loadSubtitles(song.subtitles); }
+                if (song.subtitles) {
+                    loadSubtitles(song.subtitles);
+                }
             }
             
             loadSong(songData);
@@ -144,10 +188,8 @@
             playButton.addEventListener('click', () => {
                 if (!isPlaying) {
                     if (!layoutRevealed) {
-                        // Aplica las clases para expandir
-                        playerCardContent.style.width = '640px'; // Para pantallas grandes
-                        subtitleColumn.classList.remove('h-0', 'md:w-0', 'opacity-0');
-                        // Para pantallas pequeñas, la altura se ajustará por el contenido
+                        playerCardContent.style.width = '640px'; // 320px + 320px
+                        subtitleColumn.classList.remove('w-0', 'opacity-0');
                         layoutRevealed = true;
                     }
                     isPlaying = true;
