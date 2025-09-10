@@ -108,7 +108,7 @@
         }
         
         #player-card-content {
-            transition: width 0.7s ease-in-out;
+            transition: all 0.7s ease-in-out;
         }
 
         /* Clickea aquí texto */
@@ -150,9 +150,23 @@
         
         /* Contenedor de subtítulos con transición */
         #subtitle-container {
-            height: 200px;
+            height: 180px;
             overflow-y: auto;
             line-height: 1.6;
             text-align: left;
             transition: opacity 0.25s ease-in-out;
+        }
+
+         /* Scrollbar personalizado para la letra */
+        #subtitle-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        #subtitle-container::-webkit-scrollbar-track {
+            background: #4a5568;
+            border-radius: 10px;
+        }
+        #subtitle-container::-webkit-scrollbar-thumb {
+            background-color: #e13a9d;
+            border-radius: 10px;
+            border: 2px solid #4a5568;
         }
