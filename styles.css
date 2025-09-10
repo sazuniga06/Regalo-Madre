@@ -1,0 +1,158 @@
+        body {
+            font-family: 'Caveat', cursive;
+            background: linear-gradient(135deg, #f8cdda, #a6c1ee);
+        }
+        
+        /* Contenedor del regalo y la tarjeta */
+        .gift-container {
+            position: relative;
+            perspective: 1000px;
+        }
+
+        /* Estilo del regalo */
+        .gift {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            cursor: pointer;
+            transition: transform 0.8s 0.3s ease-in-out, opacity 0.5s 0.3s ease-in-out;
+            transform-style: preserve-3d;
+        }
+        
+        /* Tapa del regalo */
+        .lid {
+            position: absolute;
+            width: 220px;
+            height: 60px;
+            background-color: #e13a9d;
+            top: -20px;
+            left: -10px;
+            border-radius: 8px;
+            z-index: 2;
+            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.5s 0.3s ease-out;
+            transform-origin: top center;
+        }
+
+        /* Lazo en la tapa (vertical) */
+        .lid::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 60px;
+            background-color: #f7b32b;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 4px;
+        }
+
+        /* Lazo en la tapa (horizontal) */
+        .lid::after {
+            content: '';
+            position: absolute;
+            width: 220px;
+            height: 30px;
+            background-color: #f7b32b;
+            top: 50%;
+            transform: translateY(-50%);
+            border-radius: 4px;
+        }
+
+        /* Caja del regalo */
+        .box {
+            position: absolute;
+            width: 200px;
+            height: 150px;
+            background-color: #8ecae6;
+            top: 40px;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Lazo en la caja (vertical) */
+        .box::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 150px;
+            background-color: #f7b32b;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 4px;
+        }
+
+        /* Animación de apertura */
+        .gift.open .lid {
+            transform: translateY(-200px) rotateX(120deg) rotateZ(15deg);
+            opacity: 0;
+        }
+
+        .gift.open {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        /* Estilo de la tarjeta musical */
+        .music-card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            transition: transform 0.6s 0.5s ease-out, opacity 0.6s 0.5s ease-out;
+            z-index: 1;
+        }
+
+        .music-card.visible {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+        
+        #player-card-content {
+            transition: width 0.7s ease-in-out;
+        }
+
+        /* Clickea aquí texto */
+        .click-text {
+            transition: opacity 0.5s ease;
+        }
+
+        /* Contenedor para el confeti */
+        .confetti-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Estilo de una pieza de confeti */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 1;
+            animation: fall 3s ease-out forwards;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotateZ(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(400px) rotateZ(720deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Contenedor de subtítulos con transición */
+        #subtitle-container {
+            height: 200px;
+            overflow-y: auto;
+            line-height: 1.6;
+            text-align: left;
+            transition: opacity 0.25s ease-in-out;
+        }
