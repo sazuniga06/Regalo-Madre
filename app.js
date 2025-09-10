@@ -1,7 +1,7 @@
         window.onload = function() {
             // --- DATOS DE LA CANCIÓN ---
             const songData = {
-                title: "Mi Todo - Feliz Cumpeaños Mamá",
+                title: "Mi Todo - Feliz Cumpleaños Mamá",
                 artist: "CodeZM",
                 cover: "cover/Mi Todo.png",
                 src: "cancion/Mi Todo.mp3",
